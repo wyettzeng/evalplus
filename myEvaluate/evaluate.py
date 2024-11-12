@@ -44,7 +44,7 @@ def evaluate(model_name: str, n_samples:int = 1):
     for dataset in ["humaneval", "mbpp"]:
         print(f"-----------{dataset}-{model_name}-------------")
         ram = model_path.replace("/", "--")
-        if n_samples == 0:
+        if n_samples == 1:
             evaluate_model(dataset=dataset, samples=f"inferenced_output/{dataset}/{ram}_vllm_temp_0.0-sanitized.jsonl")
         else:
             evaluate_model(dataset=dataset, samples=f"inferenced_output/{dataset}/{ram}_vllm_temp_1.0-sanitized.jsonl")
