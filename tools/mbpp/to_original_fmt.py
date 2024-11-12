@@ -13,9 +13,12 @@ from tqdm import tqdm
 from evalplus.data.mbpp import (MBPP_PLUS_VERSION, get_mbpp, get_mbpp_plus,
                                 get_mbpp_plus_hash)
 from evalplus.eval import is_floats
-from evalplus.eval._special_oracle import (MBPP_OUTPUT_NOT_NONE_TASKS,
-                                           MBPP_OUTPUT_SET_EQ_TASKS,
-                                           _digit_distance_nums, _surface_Area)
+from evalplus.eval._special_oracle import (
+    MBPP_OUTPUT_NOT_NONE_TASKS,
+    MBPP_OUTPUT_SET_EQ_TASKS,
+    _digit_distance_nums,
+    _surface_Area,
+)
 from evalplus.evaluate import get_groundtruth
 
 MBPP_TEST_TEMPLATE = """\

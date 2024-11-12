@@ -25,16 +25,25 @@ import multiprocessing
 import os
 import time
 from multiprocessing import Array, Value
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
+import psutil
 
-from evalplus.eval._special_oracle import (MBPP_OUTPUT_NOT_NONE_TASKS,
-                                           MBPP_OUTPUT_SET_EQ_TASKS,
-                                           _digit_distance_nums, _poly,
-                                           _surface_Area)
-from evalplus.eval.utils import (create_tempdir, reliability_guard, swallow_io,
-                                 time_limit)
+from evalplus.config import *
+from evalplus.eval._special_oracle import (
+    MBPP_OUTPUT_NOT_NONE_TASKS,
+    MBPP_OUTPUT_SET_EQ_TASKS,
+    _digit_distance_nums,
+    _poly,
+    _surface_Area,
+)
+from evalplus.eval.utils import (
+    create_tempdir,
+    reliability_guard,
+    swallow_io,
+    time_limit,
+)
 
 
 def compatible_eval_result(results: Dict) -> Dict:
@@ -87,6 +96,18 @@ _UNKNOWN = 3
 _mapping = {_SUCCESS: PASS, _FAILED: FAIL, _TIMEOUT: TIMEOUT, _UNKNOWN: None}
 
 
+def query_maximum_memory_bytes() -> Optional[int]:
+    # Disable functionalities that can make destructive changes to the test.
+    # allow only 4GB memory usage
+    maximum_memory_bytes = os.getenv(
+        "EVALPLUS_MAX_MEMORY_BYTES", 4 * 1024 * 1024 * 1024
+    )
+    maximum_memory_bytes = min(int(maximum_memory_bytes), psutil.virtual_memory().total)
+    if maximum_memory_bytes == -1:
+        return None
+    return maximum_memory_bytes
+
+
 def is_floats(x) -> bool:
     # check if it is float; List[float]; Tuple[float]
     if isinstance(x, float):
@@ -119,10 +140,7 @@ def unsafe_execute(
         rmtree = shutil.rmtree
         rmdir = os.rmdir
         chdir = os.chdir
-        # Disable functionalities that can make destructive changes to the test.
-        # allow only 4GB memory usage
-        maximum_memory_bytes = 4 * 1024 * 1024 * 1024
-        reliability_guard(maximum_memory_bytes=maximum_memory_bytes)
+        reliability_guard(maximum_memory_bytes=query_maximum_memory_bytes())
         exec_globals = {}
         try:
             with swallow_io():
@@ -168,6 +186,8 @@ def unsafe_execute(
                     if dataset == "humaneval":
                         if "find_zero" == entry_point:
                             assert abs(_poly(*inp, out)) <= atol
+                            details[i] = True
+                            progress.value += 1
                             continue
                     # ============== special oracles ================= #
                     # ================================================ #
@@ -211,8 +231,8 @@ def untrusted_check(
     atol,
     ref_time: List[float],
     fast_check: bool = False,
-    min_time_limit: float = 0.1,
-    gt_time_limit_factor: float = 2.0,
+    min_time_limit: float = DEFAULT_MIN_TIME_LIMIT,
+    gt_time_limit_factor: float = DEFAULT_GT_TIME_LIMIT_FACTOR,
 ) -> Tuple[str, np.ndarray]:
     time_limits = [max(min_time_limit, gt_time_limit_factor * t) for t in ref_time]
     timeout = min(os.getenv("EVALPLUS_TIMEOUT_PER_TASK", 60), sum(time_limits)) + 1
@@ -272,8 +292,8 @@ def evaluate_files(
     atol: float,
     ref_time: List[float],
     fast_check: bool = False,
-    min_time_limit: float = 0.1,
-    gt_time_limit_factor: float = 2.0,
+    min_time_limit: float = DEFAULT_MIN_TIME_LIMIT,
+    gt_time_limit_factor: float = DEFAULT_GT_TIME_LIMIT_FACTOR,
 ) -> List[Tuple[str, List[bool]]]:
     ret = []
     # sort files by the id in name (i.e., "../n.py")

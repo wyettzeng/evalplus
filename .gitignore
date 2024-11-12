@@ -167,6 +167,8 @@ cython_debug/
 
 # VSCode
 .vscode/
+
+# EvalPlus specific
 EvalPlus/
 backup/
 passrate.p*
@@ -176,3 +178,9 @@ MbppPlus*.gz
 evalplus/_version.py
 *mbpp.json
 *.jsonl
+*.json
+*.png
+*.pdf
+trash-bin
+.bak
+evalplus.github.io
