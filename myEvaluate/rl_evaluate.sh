@@ -7,7 +7,7 @@ models=(
 )
 
 # Available GPUs
-cuda_devices=(4 5 6 7)
+cuda_devices=(2 3)
 
 # We’ll store all commands in an array
 declare -a commands=()
