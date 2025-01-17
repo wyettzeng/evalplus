@@ -2,6 +2,8 @@
 custom_finetuned_models/*
 custom_saved_models/*
 inferenced_output/*
+trained_models
+trained_models/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
