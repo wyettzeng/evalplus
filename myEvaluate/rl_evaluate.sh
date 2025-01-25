@@ -1,13 +1,13 @@
 #!/bin/bash
 
 models=(
-  "trained_models/lr10_w_E1_kl2.0_CodeRLTrain_llama3_IPS_max2048_____E1"
-  "trained_models/lr10_w_E1_kl2.0_CodeRLTrain_llama3_IPS_max2048_____E1/checkpoint-2400"
-  "trained_models/lr10_w_E1_kl2.0_CodeRLTrain_llama3_IPS_max2048_____E1/checkpoint-3000"
+  "CodeDPO/qwen25-ins-7b-coderm-reinforce-plus"
+  "CodeDPO/qwen25-ins-7b-testcaserm-7b-reinforce-plus"
+  "Qwen/Qwen2.5-7B-Instruct"
 )
 
 # Available GPUs
-cuda_devices=(4 7)
+cuda_devices=(1 2)
 
 # We’ll store all commands in an array
 declare -a commands=()
