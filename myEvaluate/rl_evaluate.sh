@@ -1,13 +1,14 @@
 #!/bin/bash
 
 models=(
-  "CodeDPO/qwen25-ins-7b-coderm-reinforce-plus"
-  "CodeDPO/qwen25-ins-7b-testcaserm-7b-reinforce-plus"
-  "Qwen/Qwen2.5-7B-Instruct"
+  "CodeDPO/qwen25-coder-base-7b-testcaserm-7b-ppo-binary"
+  "CodeDPO/qwen25-ins-7b-testcaserm-7b-reinforce-plus_new_dataset"
+  "CodeDPO/qwen25-ins-7b-coderm-7b-ppo"
+  "CodeDPO/qwen25-ins-7b-testcaserm-7b-reinforce-plus-binary"
 )
 
 # Available GPUs
-cuda_devices=(1 2)
+cuda_devices=(2)
 
 # We’ll store all commands in an array
 declare -a commands=()
