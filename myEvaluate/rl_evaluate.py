@@ -6,6 +6,8 @@ from fire import Fire
 def evaluate(model_path: str):
     print(f"Starting inference for {model_path}")
     model_path_2 = model_path.replace("/", "--")
+    if model_path_2.startswith("--"):
+        model_path_2 = model_path_2[2:]
     
     for dataset in ["humaneval", "mbpp"]:
         create_inference(
@@ -20,8 +22,7 @@ def evaluate(model_path: str):
 
         
     for dataset in ["humaneval", "mbpp"]:
-        ram = model_path.replace("/", "--")
-        evaluate_model(dataset=dataset, samples=f"inferenced_output/rl_results/{dataset}/{ram}_vllm_temp_0.0-sanitized.jsonl")
+        evaluate_model(dataset=dataset, samples=f"inferenced_output/rl_results/{dataset}/{model_path_2}_vllm_temp_0.0-sanitized.jsonl")
 
         
 if __name__ == "__main__":
