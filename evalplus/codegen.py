@@ -137,7 +137,8 @@ def run_codegen(
     enable_chunked_prefill: bool = False,
     dtype: str = "bfloat16",
     gptqmodel_backend: str = "auto",  # For GPTQModel
-    gguf_file: Optional[str] = None
+    gguf_file: Optional[str] = None,
+    r1_system_prompt: bool = False,
 ):
     assert dataset in ["humaneval", "mbpp", "evalperf"], f"Invalid dataset {dataset}"
     assert evalperf_type is None or evalperf_type in [
@@ -220,6 +221,9 @@ def run_codegen(
         response_prefix = "Below is a Python script with a self-contained function that efficiently solves the problem and passes corresponding tests:"
     elif evalperf_type is not None and evalperf_type != "instruct":
         raise ValueError(f"Invalid evalperf_type: {evalperf_type}")
+    
+    if r1_system_prompt:
+        instruction_prefix = "A conversation between User and Assistant. The user asks a question, and the Assistant solves it. The assistant first thinks about the reasoning process in the mind and then provides the user with the answer. The reasoning process and answer are enclosed within <think> </think> and <answer> </answer> tags, respectively, i.e., <think> reasoning process here </think> <answer> answer here </answer>.\n\n" + instruction_prefix
 
     # Model creation
     model_runner = make_model(
@@ -241,6 +245,7 @@ def run_codegen(
         dtype=dtype,
         gptqmodel_backend=gptqmodel_backend,
         gguf_file=gguf_file,
+        r1_system_prompt=r1_system_prompt,
     )
 
     codegen(

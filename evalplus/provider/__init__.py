@@ -26,7 +26,10 @@ def make_model(
     # gptqmodel only
     gptqmodel_backend: str = 'auto',
     gguf_file: str = None,
+    r1_system_prompt: bool = False,
 ) -> DecoderBase:
+    if r1_system_prompt and backend != "vllm":
+        raise Exception(f"r1_system_prompt must have vllm backend, instead received: {backend}")
     if backend == "vllm":
         from evalplus.provider.vllm import VllmDecoder
 
@@ -43,7 +46,8 @@ def make_model(
             enable_prefix_caching=enable_prefix_caching,
             enable_chunked_prefill=enable_chunked_prefill,
             dtype=dtype,
-            gguf_file=gguf_file
+            gguf_file=gguf_file,
+            r1_system_prompt=r1_system_prompt,
         )
     elif backend == "hf":
         from evalplus.provider.hf import HuggingFaceDecoder

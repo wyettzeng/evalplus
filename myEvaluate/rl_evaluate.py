@@ -17,6 +17,7 @@ def evaluate(model_path: str):
             jsonl_fmt=True,
             dataset=dataset,
             backend="vllm",
+            r1_system_prompt=True
         )
         sanitize(samples=f"inferenced_output/rl_results/{dataset}/{model_path_2}_vllm_temp_0.0.jsonl")
 
