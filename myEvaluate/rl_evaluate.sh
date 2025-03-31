@@ -1,14 +1,17 @@
 #!/bin/bash
 
 models=(
-    "CodeDPO/qwen25-coder-inst-7b-reinforce-plus_v2_mini_processed_r1"
-    "CodeDPO/qwen25-coder-base-7b-reinforce-plus_v2_mini_processed_r1"
-    "CodeDPO/qwen25-coder-base-7b-reinforce-plus_v2_mini_processed_r1_grpo_kl"
-    "CodeDPO/qwen25-coder-inst-7b-reinforce-plus_v2_mini_processed_r1_cold_start"
+    "CodeDPO/AceCoder-Qwen2.5-Coder-1.5B-Ins-RM"
+    "Qwen/Qwen2.5-Coder-1.5B-Instruct"
+  "CodeDPO/qwen25-coder-1.5b-inst-reinforce-plus_new_dataset_hard_r1"
+    # "CodeDPO/qwen25-coder-inst-7b-reinforce-plus_v2_mini_processed_r1"
+    # "CodeDPO/qwen25-coder-base-7b-reinforce-plus_v2_mini_processed_r1"
+    # "CodeDPO/qwen25-coder-base-7b-reinforce-plus_v2_mini_processed_r1_grpo_kl"
+    # "CodeDPO/qwen25-coder-inst-7b-reinforce-plus_v2_mini_processed_r1_cold_start"
 )
 
 # Available GPUs
-cuda_devices=(6 7)
+cuda_devices=(5)
 
 # We’ll store all commands in an array
 declare -a commands=()
